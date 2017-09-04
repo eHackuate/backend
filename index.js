@@ -6,6 +6,11 @@ const server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 8080 });
 server.ext('onPreResponse', corsHeaders)
 
+server.on('response', (request) => {
+  console.log(`Payload: ${JSON.stringify(request.payload)}`);
+  console.log(`${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ${request.response.statusCode}`);
+});
+
 server.register(socket, (err) => {
   if (err) { throw err; }
   server.route({
