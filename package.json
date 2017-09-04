@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "hapi": "^16.5.2",
+    "hapi-cors-headers": "^1.0.0",
     "socket.io": "^2.0.3",
     "twilio": "^3.6.5"
   }
