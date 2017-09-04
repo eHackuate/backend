@@ -64,7 +64,10 @@ const people = [
 exports.receiveReply = (payload) => {
   people.forEach((person) => {
     if (person.number === payload.From) {
-      person.chain.push(payload.Body)
+      person.chain.push({
+        type: 'from',
+        payload.Body
+      })
     }
   });
   io.in('frontend').emit('update', people);
@@ -107,7 +110,10 @@ exports.register = (server, options, next) => {
       })
       /* I use this to not send sms when doing shit */
 
-      people.forEach((person) => person.chain.push(`New incident detected! Things are happening! Are you okay? (Y/N)`));
+      people.forEach((person) => person.chain.push({
+        type: 'to',
+        text: 'New incident detected! Things are happening! Are you okay? (Y/N)'
+      }));
       socket.to('frontend').emit('update', people)
     });
   });
