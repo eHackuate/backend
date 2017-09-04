@@ -3,17 +3,17 @@ const token = process.env.TOKEN
 const fromNumber = process.env.FROM
 const toNumber = process.env.TO
 const twilio = new require('twilio')(accountSid, token)
+const numbers = require('./numbers');
 
 // global var so other function can access it
 let io;
 
-// TODO; replace redacted with actuall numbers
 const people = [
   {
     id: 0,
     name: 'Erfan ilovemycoffee',
     avatar: 'https://avatars3.githubusercontent.com/u/9994172?v=4&s=460',
-    number: 'redacted',
+    number: numbers[0],
     role: 'Software Developer',
     lastSeen: 1504537609,
     status: 'okay',
@@ -23,7 +23,7 @@ const people = [
     id: 1,
     name: 'Josh O\'Hackeroo',
     avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
-    number: 'redacted',
+    number: numbers[1],
     role: 'Software Developer',
     lastSeen: 1504537609,
     status: 'idk',
@@ -33,7 +33,7 @@ const people = [
     id: 2,
     name: 'Eric McCode',
     avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
-    number: 'redacted',
+    number: numbers[2],
     role: 'Software Developer',
     lastSeen: 1504537609,
     status: 'idk',
@@ -43,7 +43,7 @@ const people = [
     id: 3,
     name: 'Ramzi Danger',
     avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
-    number: 'redacted',
+    number: numbers[3],
     role: 'Software Developer',
     lastSeen: 1504537609,
     status: 'bad',
@@ -53,7 +53,7 @@ const people = [
     id: 4,
     name: 'Em McBusiness',
     avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
-    number: 'redacted',
+    number: numbers[4],
     role: 'Product Manager',
     lastSeen: 1504537609,
     status: 'okay',
