@@ -66,7 +66,7 @@ exports.receiveReply = (payload) => {
     if (person.number === payload.From) {
       person.chain.push({
         type: 'from',
-        payload.Body
+        text: payload.Body
       })
     }
   });
