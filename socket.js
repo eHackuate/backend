@@ -4,6 +4,9 @@ const fromNumber = process.env.FROM
 const toNumber = process.env.TO
 const twilio = new require('twilio')(accountSid, token)
 
+// global var so other function can access it
+let io;
+
 // TODO; replace redacted with actuall numbers
 const people = [
   {
@@ -58,8 +61,18 @@ const people = [
   }
 ];
 
+exports.receiveReply = (payload) => {
+  people.forEach((person) => {
+    if (person.number === payload.From) {
+      person.chain.push(payload.Body)
+    }
+  });
+  io.in('frontend').emit('update', people);
+  console.log(JSON.stringify(people))
+};
+
 exports.register = (server, options, next) => {
-  const io = require('socket.io')(server.listener);
+  io = require('socket.io')(server.listener);
 
   io.on('connection', (socket) => {
     console.log(`${socket.id} connected!`);
