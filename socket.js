@@ -71,7 +71,7 @@ exports.receiveReply = (payload) => {
     }
   });
   io.in('frontend').emit('update', people);
-  console.log(JSON.stringify(people))
+  console.log(JSON.stringify(people), null, 2)
 };
 
 exports.register = (server, options, next) => {
