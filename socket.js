@@ -9,40 +9,50 @@ const people = [
   {
     id: 0,
     name: 'Erfan ilovemycoffee',
+    avatar: 'https://avatars3.githubusercontent.com/u/9994172?v=4&s=460',
     number: 'redacted',
     role: 'Software Developer',
+    lastSeen: 1504537609,
     status: 'okay',
     chain: []
   },
   {
     id: 1,
     name: 'Josh O\'Hackeroo',
+    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
     number: 'redacted',
     role: 'Software Developer',
+    lastSeen: 1504537609,
     status: 'idk',
     chain: []
   },
   {
     id: 2,
     name: 'Eric McCode',
+    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
     number: 'redacted',
     role: 'Software Developer',
+    lastSeen: 1504537609,
     status: 'idk',
     chain: []
   },
   {
     id: 3,
     name: 'Ramzi Danger',
+    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
     number: 'redacted',
     role: 'Software Developer',
+    lastSeen: 1504537609,
     status: 'bad',
     chain: []
   },
   {
     id: 4,
     name: 'Em McBusiness',
+    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
     number: 'redacted',
     role: 'Product Manager',
+    lastSeen: 1504537609,
     status: 'okay',
     chain: []
   }
