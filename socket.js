@@ -12,8 +12,8 @@ exports.register = (server, options, next) => {
   io.on('connection', (socket) => {
     console.log(`${socket.id} connected!`);
 
-    socket.on('calendar', (payload) => {
-      console.log(`${socket.id} calendar`, payload);
+    socket.on('calendar', () => {
+      console.log(`${socket.id} calendar`);
 
       socket.emit('calendar', { from: 1200, to: 1400, name: 'Meeting with client', location: 'Building 2, Meeting room 5' })
     });
