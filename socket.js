@@ -73,7 +73,7 @@ exports.register = (server, options, next) => {
       console.log(`${socket.id} is a front end!`);
 
       socket.join('frontend');
-      socket.to('frontend').emit('update', people)
+      io.in(socket.id).emit('update', people)
     })
 
     socket.on('incident', () => {
