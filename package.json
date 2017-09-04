@@ -2,9 +2,13 @@
   "name": "AreUOK",
   "version": "0.0.1",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "license": "UNLICENSED",
   "dependencies": {
     "hapi": "^16.5.2",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "twilio": "^3.6.5"
   }
 }
