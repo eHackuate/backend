@@ -141,14 +141,16 @@ exports.register = (server, options, next) => {
               type: 'to',
               text
             });
+
+            io.in('frontend').emit('update', people);
           });
         /* I use this to not send sms when doing shit */
       });
 
-      io.in('frontend').emit('update', people);
     });
 
     socket.on('reply', (number, text) => {
+      console.log(`${socket.id} replied to ${number} with "${text}".`);
       // Send message
       // /* <- this means don't send sms (comment the comment out to send sms... so meta)
       sendSMS(socket.id, number, text)
@@ -160,6 +162,7 @@ exports.register = (server, options, next) => {
                 type: 'to',
                 text
               });
+
               io.in('frontend').emit('update', people);
             }
           });
