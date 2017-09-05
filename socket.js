@@ -15,7 +15,7 @@ const people = [
     number: numbers[0],
     role: 'Software Developer',
     lastSeen: 1504537609,
-    status: 'okay',
+    status: 'idk',
     chain: []
   },
   {
@@ -45,7 +45,7 @@ const people = [
     number: numbers[3],
     role: 'Software Developer',
     lastSeen: 1504537609,
-    status: 'bad',
+    status: 'idk',
     chain: []
   },
   {
@@ -55,7 +55,7 @@ const people = [
     number: numbers[4],
     role: 'Product Manager',
     lastSeen: 1504537609,
-    status: 'okay',
+    status: 'idk',
     chain: []
   }
 ];
@@ -66,7 +66,13 @@ exports.receiveReply = (payload) => {
       person.chain.push({
         type: 'from',
         text: payload.Body
-      })
+      });
+
+      if ((/\b(yeh|yeah|yes|ya|yep)\b/).test(payload.Body.toLowerCase())) {
+        person.status = 'okay';
+      } else if ((/\b(no|nope|nah|neg)\b/).test(payload.Body.toLowerCase())) {
+        person.status = 'bad';
+      }
     }
   });
   io.in('frontend').emit('update', people);
