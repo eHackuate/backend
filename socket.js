@@ -81,11 +81,34 @@ exports.receiveReply = (payload) => {
 
       if ((/\b(yeh|yeah|yes|ya|yep)\b/).test(payload.Body.toLowerCase())) {
         person.status = 'okay';
+        console.log(`${person.name} marked safe based on incoming text`);
+
+        const botText = 'You are marked as safe!';
+        sendSMS('<webhook>', payload.From, botText)
+          .then(() => {
+            person.chain.push({
+              type: 'to',
+              text: botText
+            });
+            io.in('frontend').emit('update', people);
+          });
       } else if ((/\b(no|nope|nah|neg)\b/).test(payload.Body.toLowerCase())) {
         person.status = 'bad';
+        console.log(`${person.name} marked in danger based on incoming text`);
+
+        const botText = 'You are marked as in danger! Please click through to access evacuation plans for Telstra, 242 Exhibition http://bit.ly/242floorplans/';
+        sendSMS('<webhook>', payload.From, botText)
+          .then(() => {
+            person.chain.push({
+              type: 'to',
+              text: botText
+            });
+            io.in('frontend').emit('update', people);
+          });
       }
     }
   });
+
   io.in('frontend').emit('update', people);
   console.log(JSON.stringify(people, null, 2));
 };
