@@ -21,7 +21,7 @@ const people = [
   {
     id: 1,
     name: 'Josh O\'Hackeroo',
-    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
+    avatar: 'https://avatars2.githubusercontent.com/u/712727?v=4&s=460',
     number: numbers[1],
     role: 'Software Developer',
     lastSeen: 1504537609,
@@ -31,7 +31,7 @@ const people = [
   {
     id: 2,
     name: 'Eric McCode',
-    avatar: 'https://avatars1.githubusercontent.com/u/14273489?v=4&s=460',
+    avatar: 'https://avatars3.githubusercontent.com/u/5687681?v=4&s=460',
     number: numbers[2],
     role: 'Software Developer',
     lastSeen: 1504537609,
@@ -56,6 +56,16 @@ const people = [
     role: 'Product Manager',
     lastSeen: 1504537609,
     status: 'idk',
+    chain: []
+  },
+  {
+    id: 5,
+    name: 'Guest User #1',
+    avatar: '',
+    number: numbers[5],
+    role: 'Guest',
+    lastSeen: 1504532649,
+    status: 'okay',
     chain: []
   }
 ];
@@ -97,11 +107,10 @@ exports.register = (server, options, next) => {
       io.in(socket.id).emit('update', people)
     })
 
-    socket.on('incident', () => {
+    socket.on('incident', (text) => {
       console.log(`${socket.id} incident received!`)
 
 
-      const text = 'New incident detected! Things are happening! Are you okay? (Y/N)';
       people.forEach((person) => {
         const { number } = person;
         // Send message
