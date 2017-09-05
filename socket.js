@@ -1,8 +1,7 @@
-const accountSid = process.env.ACCOUNTSID
-const token = process.env.TOKEN
-const fromNumber = process.env.FROM
-const toNumber = process.env.TO
-const twilio = new require('twilio')(accountSid, token)
+const ACCOUNTSID = process.env.ACCOUNTSID
+const TOKEN = process.env.TOKEN
+const FROM_NUMBER = process.env.FROM
+const twilio = new require('twilio')(ACCOUNTSID, TOKEN)
 const numbers = require('./numbers');
 
 // global var so other function can access it
@@ -95,25 +94,32 @@ exports.register = (server, options, next) => {
     socket.on('incident', () => {
       console.log(`${socket.id} incident received!`)
 
-      // Send message
-      // /* <- this means don't send sms (comment the comment out to send sms... so meta)
-      let promise = twilio.messages.create({
-        from: fromNumber,
-        to: toNumber,
-        body: `New incident detected! Things are happening! Are you okay? (Y/N)`
-      })
-      promise.then((message) => {
-        console.log(`Sent message: ${message.sid}`)
-      })
-      promise.catch((err) => {
-        console.error(err)
-      })
-      /* I use this to not send sms when doing shit */
 
-      people.forEach((person) => person.chain.push({
-        type: 'to',
-        text: 'New incident detected! Things are happening! Are you okay? (Y/N)'
-      }));
+      const text = 'New incident detected! Things are happening! Are you okay? (Y/N)';
+      people.forEach((person) => {
+        const { number } = person;
+        // Send message
+        // /* <- this means don't send sms (comment the comment out to send sms... so meta)
+        twilio.messages.create({
+          from: FROM_NUMBER,
+          to: number,
+          body: text
+        })
+          .then((message) => {
+            console.log(`Sent message: ${message.sid}`)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+
+        person.chain.push({
+          type: 'to',
+          text
+        });
+
+        /* I use this to not send sms when doing shit */
+      });
+
       socket.to('frontend').emit('update', people)
     });
   });
