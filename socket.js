@@ -120,6 +120,23 @@ exports.register = (server, options, next) => {
         /* I use this to not send sms when doing shit */
       });
 
+      socket.on('reply', (number, body) => {
+        console.log(`${socket.id} send text to ${number} saying "${body}"`)
+
+        twilio.messages.create({
+          from: FROM_NUMBER,
+          to: number,
+          body
+        })
+          .then((message) => {
+            console.log(`Sent message: ${message.sid}`)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+
+      });
+
       socket.to('frontend').emit('update', people)
     });
   });
