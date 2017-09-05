@@ -92,7 +92,8 @@ exports.receiveReply = (payload) => {
 
 const sendSMS = (id, number, text) => {
   if (number === '+61000000000') {
-    return;
+    // return a bogus promise
+    return new Promise((res, rej) => rej()).catch(() => {});
   }
   console.log(`${id} send text to ${number} saying "${text}"`);
   return twilio.messages.create({
