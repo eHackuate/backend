@@ -1,10 +1,11 @@
+const process = require('process');
 const Hapi = require('hapi');
 const socket = require('./socket');
 const corsHeaders = require('hapi-cors-headers');
 
 const server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 8080 });
-server.ext('onPreResponse', corsHeaders)
+server.ext('onPreResponse', corsHeaders);
 
 server.on('response', (request) => {
   console.log(`Payload: ${JSON.stringify(request.payload, null, 2)}`);
@@ -17,6 +18,6 @@ server.register(socket, (err) => {
     method: 'POST',
     path: '/sms',
     handler: require('./sms')
-  })
+  });
   server.start();
 });

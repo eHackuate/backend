@@ -1,7 +1,8 @@
-const ACCOUNTSID = process.env.ACCOUNTSID
-const TOKEN = process.env.TOKEN
-const FROM_NUMBER = process.env.FROM
-const twilio = new require('twilio')(ACCOUNTSID, TOKEN)
+const process = require('process');
+const ACCOUNTSID = process.env.ACCOUNTSID;
+const TOKEN = process.env.TOKEN;
+const FROM_NUMBER = process.env.FROM;
+const twilio = new require('twilio')(ACCOUNTSID, TOKEN);
 const numbers = require('./numbers');
 
 // global var so other function can access it
@@ -86,7 +87,22 @@ exports.receiveReply = (payload) => {
     }
   });
   io.in('frontend').emit('update', people);
-  console.log(JSON.stringify(people, null, 2))
+  console.log(JSON.stringify(people, null, 2));
+};
+
+const sendSMS = (id, number, text) => {
+  console.log(`${id} send text to ${number} saying "${text}"`);
+  return twilio.messages.create({
+    from: FROM_NUMBER,
+    to: number,
+    body: text
+  })
+    .then((message) => {
+      console.log(`Sent message: ${message.sid}`);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 exports.register = (server, options, next) => {
@@ -104,55 +120,47 @@ exports.register = (server, options, next) => {
       console.log(`${socket.id} is a front end!`);
 
       socket.join('frontend');
-      io.in(socket.id).emit('update', people)
-    })
+      io.in(socket.id).emit('update', people);
+    });
 
     socket.on('incident', (text) => {
-      console.log(`${socket.id} incident received!`)
+      console.log(`${socket.id} incident received!`);
 
 
       people.forEach((person) => {
         const { number } = person;
         // Send message
         // /* <- this means don't send sms (comment the comment out to send sms... so meta)
-        twilio.messages.create({
-          from: FROM_NUMBER,
-          to: number,
-          body: text
-        })
-          .then((message) => {
-            console.log(`Sent message: ${message.sid}`)
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-
-        person.chain.push({
-          type: 'to',
-          text
-        });
-
+        sendSMS(socket.id, number, text)
+          .then(() => {
+            person.chain.push({
+              type: 'to',
+              text
+            });
+          });
         /* I use this to not send sms when doing shit */
       });
 
-      socket.on('reply', (number, body) => {
-        console.log(`${socket.id} send text to ${number} saying "${body}"`)
+      io.in('frontend').emit('update', people);
+    });
 
-        twilio.messages.create({
-          from: FROM_NUMBER,
-          to: number,
-          body
-        })
-          .then((message) => {
-            console.log(`Sent message: ${message.sid}`)
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-
-      });
-
-      socket.to('frontend').emit('update', people)
+    socket.on('reply', (number, text) => {
+      // Send message
+      // /* <- this means don't send sms (comment the comment out to send sms... so meta)
+      sendSMS(socket.id, number, text)
+        .then(() => {
+          // update chain on frontend
+          people.forEach((person) => {
+            if (person.number === number) {
+              person.chain.push({
+                type: 'to',
+                text
+              });
+              io.in('frontend').emit('update', people);
+            }
+          });
+        });
+      /* I use this to not send sms when doing shit */
     });
   });
 
@@ -160,5 +168,5 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-    name: 'hapi-socket'
+  name: 'hapi-socket'
 };
